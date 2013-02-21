@@ -3,8 +3,10 @@ Legacy files for Java
 
 Are you a Java Developer who needs to parse old times `legacy` flat 
 files ? You're bored to write each time a parser for these files ? In this
-case, you've come to the right page. Legacy4j is a small Java library that
+case, you've come to the right page. `Legacy4j` is a small Java library that
 helps you load fixed length files to POJO and saves them the other way.
+
+You can see the same detailed page on my [website](http://grison.me/legacy4j)
 
 
 So, let's get started.
