@@ -48,7 +48,7 @@ into your object.
 
 	public class HelloTest {
 	   public static void main(String[] args) {
-	      ILegacyFile<Hello> file = LegacyFile.fileReader("file.txt", Hello.class);
+	      FixedLengthFile<Hello> file = new FixedLengthFile<Hello>("file.txt", Hello.class);
 	      for (Hello hello: file) {
 	         System.out.println("> " + hello);
 	      }

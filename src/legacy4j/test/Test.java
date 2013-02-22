@@ -1,6 +1,7 @@
 package legacy4j.test;
 
 import legacy4j.engine.FixedLengthFile;
+import legacy4j.engine.LegacyFile;
 import legacy4j.engine.RecordConverter;
 import legacy4j.engine.mappers.EngineMappers;
 
