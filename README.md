@@ -49,8 +49,7 @@ into your object.
 	public class HelloTest {
 	   public static void main(String[] args) {
 	      ILegacyFile<Hello> file = LegacyFile.fileReader("file.txt", Hello.class);
-	      while (file.hasNext()) {
-	         Hello hello = file.next();
+	      for (Hello hello: file) {
 	         System.out.println("> " + hello);
 	      }
 	      file.close();
