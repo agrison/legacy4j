@@ -17,14 +17,14 @@ public class PrimitiveTypesMapper implements FieldMapper {
 			String fieldValue = value.substring(0, flf.value());
 			// for String just set the value (later we'll check for Trim and align modifiers)
 			if (field.getType() == String.class) {
-				// should the String be trimed ?
-				TrimField tf = field.getAnnotation(TrimField.class);
-				String newValue = tf == null ? fieldValue : Trim.trim(tf.value(), fieldValue);
-				
-				// should the String be quoted ?
+				// should the String be unquoted ?
 				QuoteField qf = field.getAnnotation(QuoteField.class);
-				newValue = qf == null ? newValue : 
-					String.format("%s%s%s", qf.value().before, newValue, qf.value().after);
+				String newValue = qf == null ? fieldValue : fieldValue.substring(qf.value().before.length(), fieldValue.length() - qf.value().after.length());
+
+                // should the String be trimed ?
+                TrimField tf = field.getAnnotation(TrimField.class);
+                newValue = tf == null ? newValue : Trim.trim(tf.value(), newValue);
+
 				field.set(inst, newValue);
 			} else if (field.getType() == int.class || field.getType() == Integer.class) {
 				field.set(inst, Integer.valueOf(fieldValue).intValue());
@@ -41,11 +41,12 @@ public class PrimitiveTypesMapper implements FieldMapper {
 			FixedLengthField flf = field.getAnnotation(FixedLengthField.class);
 			if (field.getType() == String.class) {
 				String repr = (String)field.get(inst);
+                QuoteField qf = field.getAnnotation(QuoteField.class);
+                int quoteSize = qf == null ? 0 : qf.value().before.length() + qf.value().after.length();
+                // add blank if necessary
+                repr = String.format("%-" + (flf.value() - quoteSize) + "s", repr);
 				// unquote
-				QuoteField qf = field.getAnnotation(QuoteField.class);
-				repr = qf == null ? repr : repr.replaceAll("[" + qf.value().before + qf.value().after + "]", "");
-				// add blank if necessary
-				repr = String.format("%-" + flf.value() + "s", repr);
+				repr = qf == null ? repr : String.format("%s%s%s", qf.value().before, repr , qf.value().after);//repr.replaceAll("\\Q" + qf.value().before + qf.value().after + "\\E", "");
 				return repr;
 			} else if (field.getType() == int.class || field.getType() == Integer.class) {
 				return String.format("%0" + flf.value() + "d", (Integer)field.get(inst));

@@ -1,16 +1,12 @@
 package legacy4j.engine;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 
 import legacy4j.exception.FileCloseException;
 import legacy4j.exception.FileOpenException;
 import legacy4j.exception.FileReadException;
 
-public abstract class LegacyFileImpl<T> implements LegacyFile<T> {
+public abstract class LegacyFileImpl<T> implements LegacyFile<T>, Closeable {
 	private File file;
 	private BufferedReader reader = null;
 	
@@ -26,10 +22,9 @@ public abstract class LegacyFileImpl<T> implements LegacyFile<T> {
 	}
 	
 	@Override
-	public LegacyFile<T> close() {
+	public void close() {
 		try {
 			reader.close();
-			return this;
 		} catch (IOException e) {
 			throw new FileCloseException(e);
 		}

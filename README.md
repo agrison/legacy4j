@@ -155,11 +155,17 @@ The `@QuoteField` indicates whether a field should be quoted and with what chara
 
 ### The file to be parsed
 
-	0001{Alex    }12345678,9020121215Alexandre Grison
-	...
+	- Awesome report sample data (ignored)
+    # ignored
+    0001[Alex    ]12345678991234567,907820121215Alexandre Grison
+    0002[Foo     ]12345673478751242,901220121223Foo bar bazz
+
+
+                                                Page 1
 
 ### The Item entity
 
+	// ignore line starting with a # or a - or having only spaces then a Page number (report)
 	@FixedLengthRecord(ignoreMatching="^#.*|^-.*|^\\s+Page.*$", ignoreEmpty=true)
 	public class Item {
 	   @FixedLengthField(4)
@@ -169,13 +175,10 @@ The `@QuoteField` indicates whether a field should be quoted and with what chara
 	   @QuoteField(Type.Braces)
 	   public String name;
 	   @DecimalField({8, 2}) // size = 8 + 2 = 10
-
 	   public BigDecimal num1;
 	   @DecimalField(value={7, 4}, separator=",") // size = 7 + 4 + 1 = 12
-
 	   public Double num2;
 	   @DateField("yyyyMMdd") // size = "yyyyMMdd".length() = 8
-
 	   public Calendar cal;
 	   @FixedLengthField(22)
 	   @CustomField(PersonMapper.class)
@@ -204,7 +207,6 @@ The `@QuoteField` indicates whether a field should be quoted and with what chara
 
 	public class PersonMapper implements FieldMapper {
 	   @Override
-
 	   public int fill(Object inst, Field field, String value) {
 	      try {
 	         FixedLengthField flf = field.getAnnotation(FixedLengthField.class);
@@ -220,19 +222,16 @@ The `@QuoteField` indicates whether a field should be quoted and with what chara
 
 	         return flf.value();
 	      } catch (Throwable e) {
-
 	         throw new RuntimeException(e);
 	      }
 	   }
 
 	   @Override
-
 	   public String toString(Object inst, Field field) {
 	      try {
 	         Person p = (Person)field.get(inst);
 	         return String.format("%-10s%-10s", p.firstName, p.surName);
 	      } catch (Throwable e) {
-
 	         throw new RuntimeException(e);
 	      }
 	   }
@@ -241,23 +240,20 @@ The `@QuoteField` indicates whether a field should be quoted and with what chara
 ### The main program
 
 	public class Test {
-
 	   public static void main(String[] args) {
 	      FixedLengthFile<Item> file = new FixedLengthFile<Item>("positionnal.txt", Item.class);
 	      EngineMappers.registerMapper(Person.class, new PersonMapper());
-	      file.open();
-	      while (file.hasNext()) {
-	         Item item = file.next();
-	         System.out.println("> " + item);
-	         System.out.println("= " + RecordConverter.toString(item));
-	      }
-	      // print the items back
-
-	      Item item = null;
-	      while ((item = file.readNext()) != null) {
+	      for (Item item: file) {
 	         System.out.println("> " + item);
 	         System.out.println("= " + RecordConverter.toString(item));
 	      }
 	      file.close();
 	   }
 	}
+
+### The result
+
+    > Item [id=1, name='Alex', num1=12345678.99, num2=1234567.9078, cal=15/12/2012, person=p[Alexandre, Grison]]
+    = 0001[Alex    ]12345678991234567,907820121215Alexandre Grison
+    > Item [id=2, name='Foo', num1=12345673.47, num2=8751242.9012, cal=23/12/2012, person=p[Foo bar ba, zz]]
+    = 0002[Foo     ]12345673478751242,901220121223Foo bar bazz
