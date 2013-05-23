@@ -1,4 +1,4 @@
-package legacy4j.test;
+package me.grison.legacy4j.model;
 
 public class Person {
 	public String firstName, surName;
