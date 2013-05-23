@@ -20,7 +20,7 @@ public class Item {
 	public int id;
 	@FixedLengthField(10)
 	@TrimField
-	@QuoteField(Type.Braces)
+	@QuoteField(Type.Brackets)
 	public String name;
 	@DecimalField({8, 2}) // size = 8 + 2 = 10
 	public BigDecimal num1;
@@ -29,6 +29,7 @@ public class Item {
 	@DateField("yyyyMMdd") // size = "yyyyMMdd".length() = 8
 	public Calendar cal;
 	@FixedLengthField(22)
+    @TrimField
 	@CustomField(PersonMapper.class)
 	public Person person;
 	public String toString() {

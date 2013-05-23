@@ -1,19 +1,15 @@
 package me.grison.legacy4j.engine;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 
 import me.grison.legacy4j.exception.FileCloseException;
 import me.grison.legacy4j.exception.FileOpenException;
 import me.grison.legacy4j.exception.FileReadException;
 
-public abstract class AbstractLegacyFile<T> implements LegacyFile<T> {
+public abstract class AbstractLegacyFile<T> implements LegacyFile<T>, Closeable {
 	private File file;
 	private BufferedReader reader = null;
-	
+
 	/**
 	 * Set the file we will be working on.
 	 * @param file the file
@@ -31,12 +27,11 @@ public abstract class AbstractLegacyFile<T> implements LegacyFile<T> {
     protected void setFile(File file) {
         this.file = file;
     }
-	
+
 	@Override
-	public LegacyFile<T> close() {
+	public void close() {
 		try {
 			reader.close();
-			return this;
 		} catch (IOException e) {
 			throw new FileCloseException(e);
 		}
@@ -51,7 +46,7 @@ public abstract class AbstractLegacyFile<T> implements LegacyFile<T> {
 			throw new FileOpenException(e);
 		}
 	}
-	
+
 	protected String nextLine() {
 		try {
 			return reader.readLine();
