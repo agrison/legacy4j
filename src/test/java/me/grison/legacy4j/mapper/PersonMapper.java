@@ -1,10 +1,10 @@
 package me.grison.legacy4j.mapper;
 
-import java.lang.reflect.Field;
-
 import me.grison.legacy4j.annotation.FixedLengthField;
 import me.grison.legacy4j.engine.mappers.FieldMapper;
-import me.grison.legacy4j.test.Person;
+import me.grison.legacy4j.model.Person;
+
+import java.lang.reflect.Field;
 
 public class PersonMapper implements FieldMapper {
 	@Override

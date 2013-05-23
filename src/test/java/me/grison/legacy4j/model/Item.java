@@ -1,18 +1,18 @@
 package me.grison.legacy4j.model;
 
-import java.math.BigDecimal;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-
 import me.grison.legacy4j.annotation.FixedLengthField;
 import me.grison.legacy4j.annotation.FixedLengthRecord;
 import me.grison.legacy4j.annotation.feature.QuoteField;
-import me.grison.legacy4j.annotation.feature.TrimField;
 import me.grison.legacy4j.annotation.feature.QuoteField.Type;
+import me.grison.legacy4j.annotation.feature.TrimField;
 import me.grison.legacy4j.annotation.type.CustomField;
 import me.grison.legacy4j.annotation.type.DateField;
 import me.grison.legacy4j.annotation.type.DecimalField;
-import me.grison.legacy4j.test.*;
+import me.grison.legacy4j.mapper.PersonMapper;
+
+import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 @FixedLengthRecord(ignoreMatching="^#.*|^-.*|^\\s+Page.*$", ignoreEmpty=true)
 public class Item {

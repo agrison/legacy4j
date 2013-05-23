@@ -6,7 +6,7 @@ files ? You're bored to write each time a parser for these files ? In this
 case, you've come to the right page. `Legacy4j` is a small Java library that
 helps you load fixed length files to POJO and saves them the other way.
 
-You can see the same detailed page on my [website](http://grison.me/legacy4j)
+You can see the same detailed page on my [website](http://grison.me/me.grison.legacy4j)
 
 
 So, let's get started.
@@ -48,7 +48,7 @@ into your object.
 
 	public class HelloTest {
 	   public static void main(String[] args) {
-	      ILegacyFile<Hello> file = LegacyFile.fileReader("file.txt", Hello.class);
+	      LegacyFile<Hello> file = LegacyFile.fileReader("file.txt", Hello.class);
 	      while (file.hasNext()) {
 	         Hello hello = file.next();
 	         System.out.println("> " + hello);

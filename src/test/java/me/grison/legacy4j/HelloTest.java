@@ -1,11 +1,21 @@
 package me.grison.legacy4j;
 
-/**
- * Created with IntelliJ IDEA.
- * User: alexandre
- * Date: 22/05/13
- * Time: 15:26
- * To change this template use File | Settings | File Templates.
- */
+import me.grison.legacy4j.engine.LegacyFile;
+import me.grison.legacy4j.engine.LegacyFiles;
+import me.grison.legacy4j.model.Hello;
+import org.junit.Test;
+
+import java.io.File;
+
 public class HelloTest {
+    File helloFile = new File(getClass().getResource("/hello.txt").getFile());
+
+    @Test
+    public void testHello() {
+        LegacyFile<Hello> hellos = LegacyFiles.openFileReader(helloFile, Hello.class);
+        for (Hello hello: hellos) {
+            System.out.println("> " + hello);
+        }
+        hellos.close();
+    }
 }
