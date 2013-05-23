@@ -28,7 +28,7 @@ Let's say you have this file to read data from.
 All you would have to do, is to define your Java object that will
 hold your data, and describe how data fits in it.
 
-
+```java
 	@FixedLengthRecord
 	public class Hello {
 	   @FixedLengthField(10)
@@ -42,10 +42,12 @@ hold your data, and describe how data fits in it.
 	                           meetDate); 
 	   }
 	}
+```
 
 And then call the library and ask it gently to read the file data
 into your object.
 
+```java
 	public class HelloTest {
 	   public static void main(String[] args) {
 	      LegacyFile<Hello> file = LegacyFiles.openFileReader("file.txt", Hello.class);
@@ -55,7 +57,8 @@ into your object.
 	      file.close();
 	   }
 	}
-	
+```
+
 That's it, you've read data from your file, with no need of any parser.
 
 Here is the output of the Java program:
@@ -81,11 +84,12 @@ A file is made of records (lines), a Java object needs to have the
 The `@FixedLengthField` annotation indicates that a field is delimited in size,
 and its size can be set with it.
 
-
+```java
 	public @interface FixedLengthField {
 	   /** @return the field length. */
 	   public int value();
 	}
+```
 
 ###DateField
 
@@ -93,48 +97,57 @@ The `@DateField` annotation indicates that a field is a Date or a Calendar objec
 and that the data read should be converted to the suitable destination, using a custom 
 date format.
 
+```java
 	public @interface DateField {
 	   /** @return the date format. */
 	   public String value() default "yyyyMMdd";
 	}
-	
+```
+
 ###DecimalField
 
 The `@DecimalField` annotation indicates that a field is one of int|Integer, double|Double,
 float|Float or BigDecimal and that the data read should be converted to the suitable
 destination, using a custom decimal format.
 
+```java
 	public @interface DecimalField {
 	   /** @return the lenth of int and decimal value. */
 	   public int[] value();
 	   /** @return the separator if any (must be of length 0 or 1). */
 	   public String separator() default "";
 	}
+```
 
 ###CustomField
 
 The `@CustomField` annotation indicates that a field is of a custom type and that the data read should be converted to the suitable custom type, using a custom object mapper.
 
+```java
 	public @interface CustomField {
 	   public Class<?> value();
 	}
-	
+```
+
 ##Field feature annotations
 
 ###TrimField
 
 The `@TrimField` indicates whether a field should be trimmed and in what direction (left, right or both which is the default value).
 
+```java
 	public @interface TrimField {
 	   public enum Type { Both, Left, Right }
 
 	   public Type value() defaults Type.Both;
 	}
+```
 
 ###QuoteField
 
 The `@QuoteField` indicates whether a field should be quoted and with what characters (`[]`, `()`, `{}`, `''` or `""` which is the default value).
 
+```java
 	public @interface QuoteField {
 	   public enum Type { 
 	      Brackets("[", "]"), 
@@ -149,7 +162,8 @@ The `@QuoteField` indicates whether a field should be quoted and with what chara
 
 	   public Type value() defaults Type.Quote;
 	}
-	
+```
+
 ## Sample code
 
 ### The file to be parsed
@@ -164,6 +178,7 @@ The `@QuoteField` indicates whether a field should be quoted and with what chara
 
 ### The Item entity
 
+```java
 	// ignore line starting with a # or a - or having only spaces then a Page number (report)
 	@FixedLengthRecord(ignoreMatching="^#.*|^-.*|^\\s+Page.*$", ignoreEmpty=true)
 	public class Item {
@@ -193,17 +208,21 @@ The `@QuoteField` indicates whether a field should be quoted and with what chara
 	      return "";
 	   }
 	}
+```
 
 ### The Person entity
 
+```java
 	public class Person {
 	   public String firstName, surName;
 
 	   public String toString() { return String.format("p[%s, %s]", firstName, surName); }
 	}
+```
 
 ### The Person custom mapper
 
+```java
 	public class PersonMapper implements FieldMapper {
 	   @Override
 	   public int fill(Object inst, Field field, String value) {
@@ -235,9 +254,11 @@ The `@QuoteField` indicates whether a field should be quoted and with what chara
 	      }
 	   }
 	}
+```
 
 ### The main program
 
+```java
 	public class Test {
 	   public static void main(String[] args) {
 	      LegacyFile<Item> file = LegacyFiles.openFileReader("positionnal.txt", Item.class);
@@ -249,6 +270,7 @@ The `@QuoteField` indicates whether a field should be quoted and with what chara
 	      file.close();
 	   }
 	}
+```
 
 ### The result
 
